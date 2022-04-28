@@ -1,0 +1,120 @@
+----------------------------------------------------------------------
+-- Created by Microsemi SmartDesign Thu Apr 28 15:03:35 2022
+-- Testbench Template
+-- This is a basic testbench that instantiates your design with basic 
+-- clock and reset pins connected.  If your design has special
+-- clock/reset or testbench driver requirements then you should 
+-- copy this file and modify it. 
+----------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- Company: Optimized Solutions Limited
+--
+-- File: spi_tb.vhd
+-- File history:
+--      <Revision number>: <Date>: <Comments>
+--      <Revision number>: <Date>: <Comments>
+--      <Revision number>: <Date>: <Comments>
+--
+-- Description: 
+--
+-- <Description here>
+--
+-- Targeted device: <Family::ProASIC3L> <Die::A3P600L> <Package::256 FBGA>
+-- Engineer: Caprio Mistry
+--
+--------------------------------------------------------------------------------
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity spi_tb is
+end spi_tb;
+
+architecture behavioral of spi_tb is
+
+    constant SYSCLK_PERIOD : time := 33 ns; -- 30.303MHZ
+
+    signal SYSCLK : std_logic := '0';
+    signal NSYSRESET : std_logic := '0';
+
+    component spi_slave
+        -- ports
+        port( 
+            -- Inputs
+            sclk : in std_logic;
+            reset_n : in std_logic;
+            ss_n : in std_logic;
+            mosi : in std_logic;
+            rx_req : in std_logic;
+            st_load_en : in std_logic;
+            st_load_trdy : in std_logic;
+            st_load_rrdy : in std_logic;
+            st_load_roe : in std_logic;
+            tx_load_en : in std_logic;
+            tx_load_data : in std_logic_vector(23 downto 0);
+
+            -- Outputs
+            trdy : out std_logic;
+            rrdy : out std_logic;
+            roe : out std_logic;
+            rx_data : out std_logic_vector(23 downto 0);
+            busy : out std_logic;
+            miso : out std_logic
+
+            -- Inouts
+
+        );
+    end component;
+
+begin
+
+    process
+        variable vhdl_initial : BOOLEAN := TRUE;
+
+    begin
+        if ( vhdl_initial ) then
+            -- Assert Reset
+            NSYSRESET <= '0';
+            wait for ( SYSCLK_PERIOD * 10 );
+            
+            NSYSRESET <= '1';
+            wait;
+        end if;
+    end process;
+
+    -- Clock Driver
+    SYSCLK <= not SYSCLK after (SYSCLK_PERIOD / 2.0 );
+
+    -- Instantiate Unit Under Test:  spi_slave
+    spi_slave_0 : spi_slave
+        -- port map
+        port map( 
+            -- Inputs
+            sclk => SYSCLK,
+            reset_n => NSYSRESET,
+            ss_n => '0',
+            mosi => '0',
+            rx_req => '0',
+            st_load_en => '0',
+            st_load_trdy => '0',
+            st_load_rrdy => '0',
+            st_load_roe => '0',
+            tx_load_en => '0',
+            tx_load_data => (others=> '0'),
+
+            -- Outputs
+            trdy =>  open,
+            rrdy =>  open,
+            roe =>  open,
+            rx_data => open,
+            busy =>  open,
+            miso =>  open
+
+            -- Inouts
+
+        );
+
+end behavioral;
+
